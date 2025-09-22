@@ -40,6 +40,9 @@ app.get('/api/proxy', async (req, res) => {
             maxRedirects: 5
         });
 
+        console.log(`✅ Successfully fetched data for: ${url}`);
+        console.log(`📊 Response status: ${response.status}, Content length: ${response.data.length} characters`);
+
         // Send the HTML content back to the client
         res.json({
             success: true,

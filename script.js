@@ -50,10 +50,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(result.data, 'text/html');
 
-            const answerElement = doc.querySelector("body > main > section.cr-post-content > div > div > div > div > blockquote > p > strong");
+            // Primary selector you mentioned for the answer
+            let answerElement = doc.querySelector("body > main > section.cr-post-content > div > div > div > div > blockquote > p > span > b");
             
+            if (!answerElement) {
+                // Try alternative selectors if the main one fails
+                const altSelectors = [
+                    "body > main > section.cr-post-content > div > div > div > div > blockquote > p > strong",
+                    "blockquote p span b",
+                    "blockquote p strong",
+                    "blockquote strong",
+                    "blockquote span b",
+                    ".cr-post-content blockquote p span b",
+                    ".cr-post-content blockquote p strong",
+                    ".cr-post-content strong"
+                ];
+                
+                for (const selector of altSelectors) {
+                    answerElement = doc.querySelector(selector);
+                    if (answerElement && answerElement.innerText.trim()) {
+                        break;
+                    }
+                }
+            }
+
             if (answerElement && answerElement.innerText.trim()) {
-                const answerText = answerElement.innerText.trim();
+                let answerText = answerElement.innerText.trim();
+                
+                // Clean up the answer text - remove "Answer:" prefix if present
+                if (answerText.toLowerCase().startsWith('answer:')) {
+                    answerText = answerText.substring(7).trim();
+                }
+                
                 solutionDiv.innerHTML = `
                     <div class="answer-card">
                         <h3>🧠 Brain Test Level ${levelNumber}</h3>
@@ -61,31 +89,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
             } else {
-                // Try alternative selectors if the main one fails
-                const altSelectors = [
-                    "blockquote p strong",
-                    "blockquote strong",
-                    ".answer strong",
-                    "strong"
-                ];
+                // As a last resort, try to find text containing "Answer:" in the content
+                const contentText = doc.body.innerText;
+                const answerMatch = contentText.match(/Answer:\s*([^\.]+)/i);
                 
-                let found = false;
-                for (const selector of altSelectors) {
-                    const element = doc.querySelector(selector);
-                    if (element && element.innerText.trim()) {
-                        const answerText = element.innerText.trim();
-                        solutionDiv.innerHTML = `
-                            <div class="answer-card">
-                                <h3>🧠 Brain Test Level ${levelNumber}</h3>
-                                <p><strong>Answer:</strong> ${answerText}</p>
-                            </div>
-                        `;
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if (!found) {
+                if (answerMatch && answerMatch[1]) {
+                    const answerText = answerMatch[1].trim();
+                    solutionDiv.innerHTML = `
+                        <div class="answer-card">
+                            <h3>🧠 Brain Test Level ${levelNumber}</h3>
+                            <p><strong>Answer:</strong> ${answerText}</p>
+                        </div>
+                    `;
+                } else {
                     solutionDiv.innerHTML = `
                         <div class="error-card">
                             <h3>❌ Solution Not Found</h3>
