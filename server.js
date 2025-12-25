@@ -15,6 +15,7 @@ app.use(cors());
 // Parse JSON bodies
 app.use(express.json());
 
+
 // Serve static files from the current directory
 app.use(express.static(path.join(__dirname)));
 
