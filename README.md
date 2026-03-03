@@ -169,7 +169,7 @@ The app uses CSS custom properties (variables) for easy theming:
 - The target website (DazePuzzle) might be temporarily down
 - Check browser console for error messages
 
-### Debug Mode
+### Debug Mode 
 Enable detailed logging by checking the browser console (F12) and server terminal output.
 
 ## 📝 Scripts
