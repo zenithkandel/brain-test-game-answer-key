@@ -62,7 +62,7 @@ That's it! 🎉
 ## 🏗️ Project Structure
 
 ```
-brain-test-game/
+brain-test-game/ 
 ├── 📄 index.html          # Main HTML file
 ├── 🎨 style.css           # Modern CSS styling
 ├── ⚡ script.js           # Frontend JavaScript
