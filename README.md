@@ -97,7 +97,7 @@ The server exposes the following endpoints:
 ### `GET /api/proxy`
 Proxies requests to external websites to bypass CORS restrictions.
 
-**Parameters:**
+**Parameters:** 
 - `url` (required) - The target URL to fetch
 
 **Example:**
